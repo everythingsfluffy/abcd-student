@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'Node18'   
+        nodejs 'Node18'
     }
 
     environment {
@@ -34,7 +34,7 @@ pipeline {
                 sh '''
                 docker run -u zap -d --name zap_passive \
                     -p 8090:8090 \
-                    ghcr.io/zaproxy/zap2docker-stable zap.sh -daemon -port 8090 -host 0.0.0.0 -config api.disablekey=true
+                    ghcr.io/zaproxy/zaproxy:stable zap.sh -daemon -port 8090 -host 0.0.0.0 -config api.disablekey=true
                 '''
                 sleep 10
             }
