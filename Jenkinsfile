@@ -10,11 +10,7 @@ pipeline {
     }
 
     stages {
-        stage('Install dependencies') {
-            steps {
-                sh 'npm install'
-            }
-        }
+        
 
         stage('Start Juice Shop') {
             steps {
