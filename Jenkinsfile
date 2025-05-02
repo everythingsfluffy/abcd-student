@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        JUICE_URL = 'http://localhost:3000'
+        JUICE_URL = 'http://host.docker.internal:3000'
     }
 
     stages {
