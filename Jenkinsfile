@@ -35,15 +35,16 @@ pipeline {
                 sleep 20
             }
         }
-
-        stage('Passive Scan with zap-baseline.py') {
-            steps {
-                sh '''
-                docker exec zap_passive zap-baseline.py -t ${JUICE_URL} -r zap_passive_report.html || true
-                docker cp zap_passive:/zap/zap_passive_report.html zap_passive_report.html
-                '''
-            }
-        }
+	stage('Passive Scan with zap-baseline.py') {
+    	steps {
+        	sh '''
+        	docker run --rm \
+            	-v $(pwd):/zap/wrk \
+            	ghcr.io/zaproxy/zaproxy:stable \
+            	zap-baseline.py -t ${JUICE_URL} -r zap_passive_report.html
+        	'''
+   	 }
+	}
 
         stage('Archive Report') {
             steps {
