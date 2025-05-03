@@ -51,6 +51,8 @@ pipeline {
         stage('[ZAP] Passive Scan using Docker Plugin') {
             steps {
                 script {
+		sh 'mkdir -p reports'
+
                     docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('--user 0') {
                         sh '''
                             echo "====== Workspace ======"
