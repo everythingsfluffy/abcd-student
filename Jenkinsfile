@@ -26,7 +26,7 @@ pipeline {
             }
         }
 
-        stage('Start Juice Shop') {
+        stage('Starting Juice Shop') {
             steps {
                 script {
 		sh 'pwd'
