@@ -11,7 +11,7 @@ pipeline {
 
         stage('Check Juice Shop') {
             steps {
-                sh 'curl -I http://host.docker.internal:3000 || true'
+                sh 'curl -I http://172.17.0.1:3000 || true'
             }
         }
 
