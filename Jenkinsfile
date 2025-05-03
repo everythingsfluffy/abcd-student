@@ -36,7 +36,7 @@ pipeline {
                     sh "pkill -f 'npm start' || true"
 
               
-                    sh "nohup npm start &"
+                    sh "nohup npm start -- --host 0.0.0.0 &"
              
                     sleep 10
 
