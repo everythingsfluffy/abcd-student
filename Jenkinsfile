@@ -24,42 +24,25 @@ pipeline {
             }
         }
 
-	stage('[ZAP] Baseline passive-scan') {
-    	steps {
-        sh 'mkdir -p results/'
-		sh '''
-echo "===== Katalog roboczy ====="
-pwd
-ls -la
-echo "===== Zawartość workspace ====="
-ls -la ${WORKSPACE}
-'''
-
-                sh '''
-		docker rm -f zap || true
-		
-		chmod -R 777 ${WORKSPACE}
-		mkdir -p /tmp/zapscan
-		cp ${WORKSPACE}/passive_scan.yaml /tmp/zapscan/
-           	 docker run --name zap \
-                --add-host=host.docker.internal:host-gateway \
-		--user 0 \
-                -v ${WORKSPACE}:/zap/wrk \
-                -t ghcr.io/zaproxy/zaproxy:stable bash -c \
-                "zap.sh -cmd -addonupdate; zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta -autorun /zap/wrk/passive_scan.yaml" \
-                || true
-        '''
-    }
-    post {
-        always {
-            sh '''
-                docker cp zap:/zap/wrk/reports/zap_html_report.html ${WORKSPACE}/results/zap_html_report.html
-                docker cp zap:/zap/wrk/reports/zap_xml_report.xml ${WORKSPACE}/results/zap_xml_report.xml
-                docker stop zap 
-                docker rm zap
-            '''
+ stage('[ZAP] Passive Scan using Docker plugin') {
+            steps {
+                script {
+                    docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('--add-host=host.docker.internal:host-gateway --user 0') {
+                        sh '''
+                            ls -la
+                            zap.sh -cmd -addonupdate
+                            zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta -autorun passive_scan.yaml
+                        '''
+                    }
+                }
+            }
         }
     }
-}
-}
-}
+
+    post {
+        always {
+            archiveArtifacts artifacts: '**/zap_html_report.html', allowEmptyArchive: true
+            archiveArtifacts artifacts: '**/zap_xml_report.xml', allowEmptyArchive: true
+        }
+    }
+}	
