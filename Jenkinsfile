@@ -24,41 +24,26 @@ pipeline {
             }
         }
 
-        stage('Start ZAP') {
-            steps {
+	stage('[ZAP] Baseline passive-scan') {
+    	steps {
+        sh 'mkdir -p results/'
                 sh '''
-                docker run -u zap -d --name zap_passive \
-                    -p 8090:8090 \
-                    ghcr.io/zaproxy/zaproxy:stable \
-                    zap.sh -daemon -port 8090 -host 0.0.0.0 -config api.disablekey=true
-                '''
-                sleep 20
-            }
-        }
-        stage('Passive Scan with zap-baseline.py') {
-    steps {
-        sh '''
-        docker run --rm \
-            --add-host=host.docker.internal:host-gateway \
-            -v $(pwd):/zap/wrk \
-            ghcr.io/zaproxy/zaproxy:stable \
-            zap-baseline.py -t http://host.docker.internal:3000 -r zap_passive_report.html
+            docker run --name zap \
+                --add-host=host.docker.internal:host-gateway \
+                -v /path/to/dir/with/passive/scan/yaml:/zap/wrk/:rw
+                -t ghcr.io/zaproxy/zaproxy:stable bash -c \
+                "zap.sh -cmd -addonupdate; zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta -autorun /zap/wrk/passive_scan.yaml" \
+                || true
         '''
     }
-}
-
-	stage('Archive Report') {
-            steps {
-                archiveArtifacts artifacts: 'zap_passive_report.html'
-            }
-        }
-    }
-
     post {
         always {
-            sh 'docker stop zap_passive || true'
-            sh 'docker rm zap_passive || true'
+            sh '''
+                docker cp zap:/zap/wrk/reports/zap_html_report.html ${WORKSPACE}/results/zap_html_report.html
+                docker cp zap:/zap/wrk/reports/zap_xml_report.xml ${WORKSPACE}/results/zap_xml_report.xml
+                docker stop zap juice-shop
+                docker rm zap
+            '''
         }
     }
 }
-
