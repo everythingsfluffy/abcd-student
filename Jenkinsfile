@@ -37,6 +37,8 @@ ls -la ${WORKSPACE}
 
                 sh '''
 		docker rm -f zap || true
+		chmod -R a+r ${WORKSPACE}/passive_scan.yaml
+
            	 docker run --name zap \
                 --add-host=host.docker.internal:host-gateway \
                 -v ${WORKSPACE}:/zap/wrk/:rw \
