@@ -37,6 +37,7 @@ ls -la ${WORKSPACE}
 
                 sh '''
 		docker rm -f zap || true
+		docker run --rm -v /var/jenkins_home/workspace/JuiceTest:/zap/wrk ghcr.io/zaproxy/zaproxy:stable ls -la /zap/wrk/passive_scan.yaml
 		chmod -R 777 ${WORKSPACE}
 
            	 docker run --name zap \
