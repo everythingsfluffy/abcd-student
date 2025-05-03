@@ -38,7 +38,7 @@ pipeline {
               
                     sh "nohup npm start -- --host 0.0.0.0 &"
              
-                    sleep 10
+                    sleep 11
 		   echo "===== IP addrs w kontenerze Jenkinsa ====="
             hostname -I || ip addr || ifconfig || true
 
