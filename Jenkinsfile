@@ -31,7 +31,7 @@ pipeline {
                         sh '''
                             ls -la
                             zap.sh -cmd -addonupdate
-                            zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta -autorun passive_scan.yaml
+                            zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta -autorun /zap/wrk/passive_scan.yaml
                         '''
                     }
                 }
