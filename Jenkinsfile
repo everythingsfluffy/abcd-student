@@ -65,9 +65,12 @@ pipeline {
                             zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta \
                                 -autorun /var/jenkins_home/workspace/JuiceTest/passive_scan.yaml &
 
+	
     	ZAP_PID=$!
    	 sleep 60  # daj czas na wykonanie automatycznego scanowania
-    	kill $ZAP_PID || true
+	 cp /zap/wrk/reports/*.html .
+        cp /zap/wrk/reports/*.xml .    	
+kill $ZAP_PID || true
 			    
 			   
 
@@ -83,20 +86,8 @@ pipeline {
         always {
 		script {
 
-            sh '''
-            # Skopiuj raporty z kontenera "zap" do katalogu results
-            docker cp zap:/zap/wrk/reports/zap_html_report.html results/ || true
-            docker cp zap:/zap/wrk/reports/zap_xml_report.xml results/ || true
+           archiveArtifacts artifacts: '*.html, *.xml', allowEmptyArchive: true
 
-            # Upewnij się, że katalog results istnieje
-            mkdir -p results
-
-            # Dla bezpieczeństwa — jeśli raporty jednak już są w reports/
-            if [ -f reports/zap_html_report.html ]; then cp reports/zap_html_report.html results/; fi
-            if [ -f reports/zap_xml_report.xml ]; then cp reports/zap_xml_report.xml results/; fi
-            '''
-       		 }
-        archiveArtifacts artifacts: 'results/*.html, results/*.xml', allowEmptyArchive: true
     }            
 }
 	}
