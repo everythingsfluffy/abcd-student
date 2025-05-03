@@ -76,17 +76,21 @@ pipeline {
 
     post {
         always {
-            script {
-                // Skopiuj artefakty jeśli powstaną
-                sh '''
-                    mkdir -p results
-                    if [ -f reports/zap_html_report.html ]; then cp reports/zap_html_report.html results/; fi
-                    if [ -f reports/zap_xml_report.xml ]; then cp reports/zap_xml_report.xml results/; fi
-                '''
-            }
+script {
+            sh '''
+            # Skopiuj raporty z kontenera "zap" do katalogu results
+            docker cp zap:/zap/wrk/reports/zap_html_report.html results/ || true
+            docker cp zap:/zap/wrk/reports/zap_xml_report.xml results/ || true
 
-            archiveArtifacts artifacts: 'results/*.html, results/*.xml', allowEmptyArchive: true
+            # Upewnij się, że katalog results istnieje
+            mkdir -p results
+
+            # Dla bezpieczeństwa — jeśli raporty jednak już są w reports/
+            if [ -f reports/zap_html_report.html ]; then cp reports/zap_html_report.html results/; fi
+            if [ -f reports/zap_xml_report.xml ]; then cp reports/zap_xml_report.xml results/; fi
+            '''
         }
-    }
+        archiveArtifacts artifacts: 'results/*.html, results/*.xml', allowEmptyArchive: true
+    }            
 }
 	
