@@ -27,16 +27,18 @@ pipeline {
         stage('Start Juice Shop') {
             steps {
                 script {
-                    // Jeśli by jakimś cudem było, to zabij
+		sh 'pwd'
+		sh 'ls -la'
+
+               
                     sh "pkill -f 'npm start' || true"
 
-                    // Start Juice Shop w tle
+              
                     sh "nohup npm start &"
-
-                    // Poczekaj aż się uruchomi
+             
                     sleep 10
 
-                    // Sprawdź czy działa
+            
                     sh "curl -I http://localhost:${JUICE_PORT} || true"
                 }
             }
