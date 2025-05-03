@@ -3,6 +3,10 @@ pipeline {
    tools {
 	nodejs 'Node18'
 }
+triggers {
+    pollSCM('* * * * *')
+}
+
     environment {
         JUICE_PORT = "3000"
         ZAP_CONTAINER = "zap_scanner"
