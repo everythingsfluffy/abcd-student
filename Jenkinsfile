@@ -51,7 +51,7 @@ pipeline {
         stage('[ZAP] Passive Scan using Docker Plugin') {
             steps {
                 script {
-		sh 'mkdir -p reports'
+		
 
                     docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('--user 0') {
                         sh '''
@@ -60,7 +60,7 @@ pipeline {
 			    ls -la
                             echo "====== passive_scan.yaml ======"
                             cat passive_scan.yaml || true
-
+			    mkdir -p /zap/wrk/reports
                             zap.sh -cmd -addonupdate
                             zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta \
                                 -autorun /var/jenkins_home/workspace/JuiceTest/passive_scan.yaml
