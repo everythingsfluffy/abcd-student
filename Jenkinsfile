@@ -28,7 +28,7 @@ pipeline {
 
                             zap.sh -cmd -addonupdate
                             zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta \
-                                -autorun /zap/wrk/passive_scan.yaml
+                                -autorun /var/jenkins_home/workspace/JuiceTest/passive_scan.yaml
 
                             echo "====== Szukam reportów ======"
                             ls -la /zap/wrk/reports || true
