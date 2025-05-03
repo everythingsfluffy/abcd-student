@@ -2,9 +2,9 @@ env:
   contexts:
     - name: test-context
       urls:
-        - "http://localhost:3000/"
+        - "http://172.17.0.2:3000/"
       includePaths:
-        - "http://localhost:3000/.*"
+        - "http://172.17.0.2:3000/.*"
   parameters:
     failOnError: true
     failOnWarning: false
