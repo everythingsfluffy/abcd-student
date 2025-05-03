@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+   tools {
+	nodejs 'Node18'
+}
     environment {
         JUICE_PORT = "3000"
         ZAP_CONTAINER = "zap_scanner"
