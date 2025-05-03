@@ -1,46 +1,19 @@
 pipeline {
     agent any
 
-    environment {
-        JUICE_PORT = "3000"
-        ZAP_CONTAINER = "zap_scanner"
-    }
-
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Install dependencies (only once)') {
-            when {
-                not {
-                    expression { fileExists('node_modules') }
-                }
-            }
-            steps {
-                sh 'npm install'
-            }
-        }
-
         stage('Start Juice Shop') {
             steps {
-                script {
-                    // Jeśli by jakimś cudem było, to zabij
-                    sh "pkill -f 'npm start' || true"
-
-                    // Start Juice Shop w tle
-                    sh "nohup npm start &"
-
-                    // Poczekaj aż się uruchomi
-                    sleep 10
-
-                    // Sprawdź czy działa
-                    sh "curl -I http://localhost:${JUICE_PORT} || true"
-                }
+                sh 'nohup npm start &'
+                sh 'sleep 10'
             }
-        } 
+        }
+
+        stage('Check Juice Shop') {
+            steps {
+                sh 'curl -I http://172.17.0.1:3000 || true'
+            }
+        }
 
         stage('[ZAP] Passive Scan using Docker Plugin') {
             steps {
