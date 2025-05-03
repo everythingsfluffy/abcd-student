@@ -27,6 +27,14 @@ pipeline {
 	stage('[ZAP] Baseline passive-scan') {
     	steps {
         sh 'mkdir -p results/'
+		sh '''
+echo "===== Katalog roboczy ====="
+pwd
+ls -la
+echo "===== Zawartość workspace ====="
+ls -la ${WORKSPACE}
+'''
+
                 sh '''
 		docker rm -f zap || true
            	 docker run --name zap \
