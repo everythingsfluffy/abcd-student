@@ -28,7 +28,8 @@ pipeline {
     	steps {
         sh 'mkdir -p results/'
                 sh '''
-            docker run --name zap \
+		docker rm -f zap || true
+           	 docker run --name zap \
                 --add-host=host.docker.internal:host-gateway \
                 -v $(pwd):/zap/wrk \
                 -t ghcr.io/zaproxy/zaproxy:stable bash -c \
