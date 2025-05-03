@@ -37,12 +37,13 @@ ls -la ${WORKSPACE}
 
                 sh '''
 		docker rm -f zap || true
-		docker run --rm -v /var/jenkins_home/workspace/JuiceTest:/zap/wrk ghcr.io/zaproxy/zaproxy:stable ls -la /zap/wrk/passive_scan.yaml
+		
 		chmod -R 777 ${WORKSPACE}
-
+		mkdir -p /tmp/zapscan
+		cp ${WORKSPACE}/passive_scan.yaml /tmp/zapscan/
            	 docker run --name zap \
                 --add-host=host.docker.internal:host-gateway \
-                -v ${WORKSPACE}:/zap/wrk/:rw \
+                -v /tmp/zapscan:/zap/wrk
                 -t ghcr.io/zaproxy/zaproxy:stable bash -c \
                 "zap.sh -cmd -addonupdate; zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta -autorun passive_scan.yaml" \
                 || true
