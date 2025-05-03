@@ -3,9 +3,7 @@ pipeline {
    tools {
 	nodejs 'Node18'
 }
-triggers {
-    pollSCM('* * * * *')
-}
+
 
     environment {
         JUICE_PORT = "3000"
@@ -37,11 +35,13 @@ triggers {
                     sh "nohup npm start -- --host 0.0.0.0 &"
              
                     sleep 11
+		sh'''
 		   echo "===== IP addrs w kontenerze Jenkinsa ====="
             hostname -I || ip addr || ifconfig || true
 
             echo "===== Czy Juice Shop nasłuchuje na porcie 3000? ====="
             netstat -tuln | grep 3000 || ss -tuln | grep 3000 || true
+		'''
             
                     sh "curl -I http://localhost:${JUICE_PORT} || true"
                 }
