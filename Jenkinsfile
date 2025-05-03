@@ -37,7 +37,7 @@ ls -la ${WORKSPACE}
 
                 sh '''
 		docker rm -f zap || true
-		chmod -R 777 ${WORSPACE}
+		chmod -R 777 ${WORKSPACE}
 
            	 docker run --name zap \
                 --add-host=host.docker.internal:host-gateway \
