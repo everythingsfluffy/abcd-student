@@ -63,15 +63,17 @@ pipeline {
 			    mkdir -p /zap/wrk/reports
                             zap.sh -cmd -addonupdate
                             zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta \
-                                -autorun /var/jenkins_home/workspace/JuiceTest/passive_scan.yaml
+                                -autorun /var/jenkins_home/workspace/JuiceTest/passive_scan.yaml &
+
+    	ZAP_PID=$!
+   	 sleep 60  # daj czas na wykonanie automatycznego scanowania
+    	kill $ZAP_PID || true
 			    
 			   
 
                             '''
                     }
                 }
-sh 'docker stop zap || true'
-sh 'docker rm zap || true'
 
             }
         }
