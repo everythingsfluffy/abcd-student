@@ -21,13 +21,14 @@ pipeline {
                     docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('--add-host=host.docker.internal:host-gateway --user 0') {
                         sh '''
                             echo "====== Workspace ======"
-                            ls -la
+                            pwd
+			    ls -la
                             echo "====== passive_scan.yaml ======"
                             cat passive_scan.yaml || true
 
                             zap.sh -cmd -addonupdate
                             zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta \
-                                -autorun passive_scan.yaml
+                                -autorun /zap/wrk/passive_scan.yaml
 
                             echo "====== Szukam reportów ======"
                             ls -la /zap/wrk/reports || true
