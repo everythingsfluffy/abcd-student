@@ -45,7 +45,7 @@ ls -la ${WORKSPACE}
                 --add-host=host.docker.internal:host-gateway \
                 -v /tmp/zapscan:/zap/wrk \
                 -t ghcr.io/zaproxy/zaproxy:stable bash -c \
-                "zap.sh -cmd -addonupdate; zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta -autorun passive_scan.yaml" \
+                "zap.sh -cmd -addonupdate; zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta -autorun /zap/wrk/passive_scan.yaml" \
                 || true
         '''
     }
