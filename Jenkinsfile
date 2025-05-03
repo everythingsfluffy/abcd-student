@@ -64,12 +64,15 @@ pipeline {
                             zap.sh -cmd -addonupdate
                             zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta \
                                 -autorun /var/jenkins_home/workspace/JuiceTest/passive_scan.yaml
+			    
+			   
 
-                            echo "====== Szukam reportów ======"
-                            ls -la /zap/wrk/reports || true
-                        '''
+                            '''
                     }
                 }
+sh 'docker stop zap || true'
+sh 'docker rm zap || true'
+
             }
         }
     }
