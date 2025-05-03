@@ -76,7 +76,8 @@ pipeline {
 
     post {
         always {
-script {
+		script {
+
             sh '''
             # Skopiuj raporty z kontenera "zap" do katalogu results
             docker cp zap:/zap/wrk/reports/zap_html_report.html results/ || true
@@ -89,8 +90,8 @@ script {
             if [ -f reports/zap_html_report.html ]; then cp reports/zap_html_report.html results/; fi
             if [ -f reports/zap_xml_report.xml ]; then cp reports/zap_xml_report.xml results/; fi
             '''
-        }
+       		 }
         archiveArtifacts artifacts: 'results/*.html, results/*.xml', allowEmptyArchive: true
     }            
 }
-	
+	}
