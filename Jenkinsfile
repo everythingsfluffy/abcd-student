@@ -13,12 +13,6 @@ triggers {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Install dependencies (only once)') {
             when {
                 not {
