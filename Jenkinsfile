@@ -49,7 +49,7 @@ pipeline {
         stage('[ZAP] Passive Scan using Docker Plugin') {
             steps {
                 script {
-                    docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('--add-host=host.docker.internal:host-gateway --user 0') {
+                    docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('--user 0') {
                         sh '''
                             echo "====== Workspace ======"
                             pwd
