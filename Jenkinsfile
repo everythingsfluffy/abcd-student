@@ -113,7 +113,7 @@ pipeline {
 						-H "Authorization: Token ${apiKey}" \
 						-F "scan_type=OSV Scan" \
 						-F "minimum_severity=Low" \
-						-F "file=osv_report.json" \
+						-F "file=@osv_report.json" \
 						-F "product_name=osv"\
 						-F engagement_name="Jenkins Automated Scan"
 						"""
