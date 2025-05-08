@@ -94,7 +94,8 @@ pipeline {
 		stage('OSV-Scanner') {
 			steps {
 				sh '''
-					ls $(pwd)
+				docker info | grep -i root
+ls $(pwd)
 					whoami
 					ls -la package-lock.json
 					mkdir /tmp/testdocker
