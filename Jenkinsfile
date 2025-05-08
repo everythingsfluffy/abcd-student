@@ -111,7 +111,7 @@ pipeline {
 						sh """
 						curl -k -X POST "${dojoUrl}import-scan/" \
 						-H "Authorization: Token ${apiKey}" \
-						-F "scan_type=OSV Scanner" \
+						-F "scan_type=OSV Scan" \
 						-F "minimum_severity=Low" \
 						-F "file=@osv_report.json" \
 						-F "product_name=osv"\
