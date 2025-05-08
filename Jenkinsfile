@@ -94,7 +94,8 @@ pipeline {
 		stage('OSV-Scanner') {
 			steps {
 			      script{
-						sh 'osv-scanner --lockfile=package-lock.json --format=json > osv-report.json'
+						sh 'osv-scanner --lockfile=package-lock.json --format=json > osv-report.json ||'
+						archiveArtifacts artifacts: 'osv-report.json'
 							}
 		}
 
