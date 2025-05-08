@@ -95,12 +95,13 @@ pipeline {
 			agent {
 				docker {
 					image 'ghcr.io/google/osv-scanner:latest'
-						args '-w /app'
+						args '--entrypoint=osv-scanner -v $WORKSPACE:/app -w /app'
+
 				}
 			}
 			steps {
-				sh 'ls -la package-lock.json'
-					sh 'osv-scanner --lockfile=package-lock.json'
+			sh '--lockfile=package-lock.json'
+
 			}
 		}
 
