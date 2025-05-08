@@ -96,7 +96,7 @@ pipeline {
 				sh '''
 				  ls $(pwd)
 					docker run --rm --network host \
-					-v $(pwd):/app \
+					  -v /var/jenkins_home/workspace/JuiceTest/package-lock.json:/app/package-lock.json \
 										 ghcr.io/google/osv-scanner:latest \
 													--lockfile=app/package-lock.json \
 														 --format=json > osv_report.json
