@@ -92,17 +92,10 @@ pipeline {
 				 }
 				 }	 */
 		stage('OSV-Scanner') {
-			agent {
-				docker {
-					image 'ghcr.io/google/osv-scanner:latest'
-						args '--entrypoint=osv-scanner -v $WORKSPACE:/app -w /app'
-
-				}
-			}
 			steps {
-			sh '--lockfile=package-lock.json'
-
-			}
+			      script{
+						sh 'osv-scanner --lockfile=package-lock.json --format=json > osv-report.json'
+							}
 		}
 
 }
