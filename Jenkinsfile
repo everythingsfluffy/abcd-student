@@ -94,13 +94,13 @@ pipeline {
 		stage('OSV-Scanner') {
 			steps {
 				sh '''
-				  ls $(pwd)
+					ls $(pwd)
 					docker run --rm --network host \
-					  -v /var/jenkins_home/workspace/JuiceTest/package-lock.json:/app/package-lock.json \
-										 ghcr.io/google/osv-scanner:latest \
-													--lockfile=app/package-lock.json \
-														 --format=json > osv_report.json
-															'''
+					-v /var/jenkins_home/workspace/JuiceTest/package-lock.json:/app/package-lock.json \
+					ghcr.io/google/osv-scanner:latest \
+					--lockfile=app/package-lock.json \
+					--format=json > osv_report.json
+					'''
 			}
 		}
 
