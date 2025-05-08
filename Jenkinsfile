@@ -104,12 +104,12 @@ pipeline {
 		stage('Import OSV Report to DefectDojo') {
 			steps {
 				script {
-					def dojoUrl = 'http://192.168.40.18:9090/api/v2/reimport-scan/'
+					def dojoUrl = 'http://192.168.40.18:9090/api/v2/'
 						def apiKey = '10e30cc2206235cf618e6ace3e6c9c9d2f9d6939'
 						def productId = '1'
 
 						sh """
-						curl -k -X POST "${dojoUrl}import-scan/" \
+						curl -k -X POST "${dojoUrl}reimport-scan/" \
 						-H "Authorization: Token ${apiKey}" \
 						-F "scan_type=OSV Scan" \
 						-F "minimum_severity=Low" \
