@@ -97,7 +97,11 @@ pipeline {
 					ls $(pwd)
 					whoami
 					ls -la package-lock.json
-					docker run --rm -v $(pwd):/app debian ls -la /app/package-lock.json
+					mkdir /tmp/testdocker
+					cp /var/jenkins_home/workspace/JuiceTest/package-lock.json /tmp/testdocker/
+
+					docker run --rm -v /tmp/testdocker:/app debian ls -la /app/package-lock.json
+
 					docker run --rm --network host \
 					-v $(pwd)/app \
 					ghcr.io/google/osv-scanner:latest \
