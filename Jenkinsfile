@@ -93,13 +93,32 @@ pipeline {
 				 }	 */
 		stage('OSV-Scanner') {
 			steps {
-			      script{
-						sh 'osv-scanner --lockfile=package-lock.json --format=json > osv-report.json || true'
+				script{
+					sh 'osv-scanner --lockfile=package-lock.json --format=json > osv-report.json || true'
 						archiveArtifacts artifacts: 'osv-report.json'
-							}
-		}
+				}
+			}
 
-}
+
+		}
+		stage('Import OSV Report to DefectDojo') {
+			steps {
+				script {
+					def dojoUrl = 'https://192.168.40.18:9090/api/v2/'
+						def apiKey = '10e30cc2206235cf618e6ace3e6c9c9d2f9d6939'
+						def productId = '1'
+
+						sh """
+						curl -k -X POST "${dojoUrl}import-scan/" \
+						-H "Authorization: Token ${apiKey}" \
+						-F "scan_type=OSV Scanner" \
+						-F "minimum_severity=Low" \
+						-F "file=@osv_report.json" \
+						-F "product=${productId}"
+						"""
+				}
+			}
+		}
 }
 
 }
