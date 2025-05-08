@@ -94,10 +94,11 @@ pipeline {
 		stage('OSV-Scanner') {
 			steps {
 				sh '''
+				  ls $(pwd)
 					docker run --rm --network host \
 					-v $(pwd):/app \
 										 ghcr.io/google/osv-scanner:latest \
-													--lockfile=package-lock.json \
+													--lockfile=app/package-lock.json \
 														 --format=json > osv_report.json
 															'''
 			}
