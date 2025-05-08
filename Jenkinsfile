@@ -98,8 +98,9 @@ pipeline {
 					whoami
 					ls -la package-lock.json
 					docker run --rm --network host \
-					-v $(pwd)/app debian ls -la /app/package-lock.json\
+					-v $(pwd)/app \
 					ghcr.io/google/osv-scanner:latest \
+					ls -la /app/package-lock.json \
 					--lockfile=app/package-lock.json \
 					--format=json > osv_report.json
 					'''
