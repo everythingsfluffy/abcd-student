@@ -114,7 +114,7 @@ pipeline {
 						-F "scan_type=OSV Scanner" \
 						-F "minimum_severity=Low" \
 						-F "file=@osv_report.json" \
-						-F "product=${productId}"
+						-F "product_name=osv"
 						"""
 				}
 			}
