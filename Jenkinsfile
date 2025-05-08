@@ -93,17 +93,15 @@ pipeline {
 				 }	 */
 		stage('OSV-Scanner') {
 			steps {
-				script {
-					docker.image('ghcr.io/google/osv-scanner:latest').inside{                                   sh '''
-						echo "==== Skanowanie package-lock.json ===="
-							osv-scanner --lockfile=package-lock.json --format=json > osv_report.json
-							cat osv_report.json
-							'''
-					}
-				}
+				sh '''
+					docker run --rm --network host \
+					-v $(pwd):/app \
+										 ghcr.io/google/osv-scanner:latest \
+													--lockfile=/app/package-lock.json \
+														 --format=json > osv_report.json
+															'''
 			}
 		}
-
 
 
 }
