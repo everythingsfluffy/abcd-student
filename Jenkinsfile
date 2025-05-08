@@ -115,7 +115,7 @@ pipeline {
 						-F "minimum_severity=Low" \
 						-F "file=@osv_report.json" \
 						-F "product_name=osv"\
-						-F engagement_name="Jenkins Automated Scan"
+						-F engagement_name="Test"
 						"""
 				}
 			}
