@@ -77,7 +77,7 @@ pipeline {
 				}
 			}
 		}
-}
+
 			  stage('[ZAP] Passive Scan using Docker Plugin') {
 				 steps {
 				 script {
@@ -122,4 +122,5 @@ pipeline {
 				 }
 				 }	 
 		
+}
 }
