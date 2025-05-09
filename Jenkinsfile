@@ -48,7 +48,7 @@ pipeline {
 			}
 		} 
 
-		/*   stage('[ZAP] Passive Scan using Docker Plugin') {
+			  stage('[ZAP] Passive Scan using Docker Plugin') {
 				 steps {
 				 script {
 
@@ -90,7 +90,7 @@ pipeline {
 
 				 }            
 				 }
-				 }	 */
+				 }	 
 		stage('OSV-Scanner') {
 			steps {
 				script{
