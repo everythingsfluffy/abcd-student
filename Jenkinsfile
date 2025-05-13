@@ -78,49 +78,68 @@ pipeline {
 			}
 		}
 
-			  stage('[ZAP] Passive Scan using Docker Plugin') {
-				 steps {
-				 script {
+		stage('[ZAP] Passive Scan using Docker Plugin') {
+			steps {
+				script {
 
 
-				 docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('--user 0') {
-				 sh '''
-				 echo "====== Workspace ======"
-				 pwd
-				 ls -la
-				 echo "====== passive_scan.yaml ======"
-				 cat passive_scan.yaml || true
-				 mkdir -p /zap/wrk/reports
-				 zap.sh -cmd -addonupdate
-				 zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta \
-				 -autorun /var/jenkins_home/workspace/JuiceTest/passive_scan.yaml &
+					docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('--user 0') {
+						sh '''
+							echo "====== Workspace ======"
+							pwd
+							ls -la
+							echo "====== passive_scan.yaml ======"
+							cat passive_scan.yaml || true
+							mkdir -p /zap/wrk/reports
+							zap.sh -cmd -addonupdate
+							zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta \
+							-autorun /var/jenkins_home/workspace/JuiceTest/passive_scan.yaml &
 
 
-				 ZAP_PID=$!
-				 sleep 60  # daj czas na wykonanie automatycznego scanowania
-				 cp /zap/wrk/reports/*.html .
-				 cp /zap/wrk/reports/*.xml .    	
-				 kill $ZAP_PID || true
+							ZAP_PID=$!
+							sleep 60  # daj czas na wykonanie automatycznego scanowania
+							cp /zap/wrk/reports/*.html .
+																	 cp /zap/wrk/reports/*.xml .    	
+																	 kill $ZAP_PID || true
 
 
 
-				 '''
-				 }
-				 }
+																	 '''
+																	 }
+																	 }
 
-				 }
-				 }
-				 
+																	 }
+																	 }
+
+																	 }
+				 stage('TruffleHog Scan') {
+					steps {
+						script {
+							sh '''
+
+mkdir -p trufflehog-results
+
+trufflehog git file:///var/jenkins_home/workspace/JuiceTest \
+--branch main \
+--json > trufflehog-results/trufflehog_output.json || true
+
+
+trufflehog git file:///var/jenkins_home/workspace/JuiceTest \
+--branch main \
+--report trufflehog-results/trufflehog_report.html || true
+'''
 }
-				 post {
-				 always {
-				 script {
+}
+}
+post {
+always {
+script {
+archiveArtifacts artifacts: 'trufflehog-results/*', allowEmptyArchive: true
+archiveArtifacts artifacts: '*.html, *.xml', allowEmptyArchive: true
 
-				 archiveArtifacts artifacts: '*.html, *.xml', allowEmptyArchive: true
+}            
+}
+}	 
 
-				 }            
-				 }
-				 }	 
-		
 }
 
