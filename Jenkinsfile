@@ -59,7 +59,7 @@ pipeline {
 
 
 		}
-		stage('Import OSV Report to DefectDojo') {
+/*		stage('Import OSV Report to DefectDojo') {
 			steps {
 				script {
 					def dojoUrl = 'http://192.168.40.18:9090/api/v2/'
@@ -78,7 +78,7 @@ pipeline {
 				}
 			}
 		}
-
+*/
 		stage('[ZAP] Passive Scan using Docker Plugin') {
 			steps {
 				script {
