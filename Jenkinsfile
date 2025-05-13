@@ -111,7 +111,7 @@ pipeline {
 																	 }
 																	 }
 
-																	 }
+																	 
 				 stage('TruffleHog Scan') {
 					steps {
 						script {
@@ -128,6 +128,7 @@ trufflehog git file:///var/jenkins_home/workspace/JuiceTest \
 --branch main \
 --report trufflehog-results/trufflehog_report.html || true
 '''
+}
 }
 }
 }
