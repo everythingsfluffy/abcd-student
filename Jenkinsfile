@@ -140,7 +140,7 @@ post {
 always {
 script {
 archiveArtifacts artifacts: 'trufflehog-results/*.json', allowEmptyArchive: true
-archiveArtifacts artifacts: '*.html, *.xml', allowEmptyArchive: true
+archiveArtifacts artifacts: '*.xml', allowEmptyArchive: true
 
 }            
 }
