@@ -135,7 +135,8 @@ if [ -s trufflehog-results/raw_trufflehog_report.json ]; then
 }
 }
 }
-}
+
+
 }
 post {
 always {
