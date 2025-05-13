@@ -118,15 +118,8 @@ pipeline {
 							sh '''
 
 mkdir -p trufflehog-results
-
-trufflehog git file:///var/jenkins_home/workspace/JuiceTest \
---branch main \
---json > trufflehog-results/trufflehog_output.json || true
-
-
-trufflehog git file:///var/jenkins_home/workspace/JuiceTest \
---branch main \
---report trufflehog-results/trufflehog_report.html || true
+ trufflehog git file:///var/jenkins_home/workspace/JuiceTest --branch main --json \
+                     > trufflehog-results/trufflehog_report.json
 '''
 }
 }
@@ -135,7 +128,7 @@ trufflehog git file:///var/jenkins_home/workspace/JuiceTest \
 post {
 always {
 script {
-archiveArtifacts artifacts: 'trufflehog-results/*', allowEmptyArchive: true
+archiveArtifacts artifacts: 'trufflehog-results/*.json', allowEmptyArchive: true
 archiveArtifacts artifacts: '*.html, *.xml', allowEmptyArchive: true
 
 }            
