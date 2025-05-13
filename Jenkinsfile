@@ -12,13 +12,6 @@ pipeline {
 
 	stages {
 	stage('Clean old artifacts') {
-	    steps {
-			        script {
-							            deleteDir() // usuwa workspace (w tym stare artefakty)
-													        }
-																	    }
-																			}
-
 		stage('Install dependencies (only once)') {
 			when {
 				not {
