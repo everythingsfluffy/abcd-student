@@ -118,11 +118,18 @@ pipeline {
 							sh '''
 
 mkdir -p trufflehog-results
- trufflehog git file:///var/jenkins_home/workspace/JuiceTest --branch main --json \
-                     > trufflehog-results/trufflehog_report.json
-echo "[" > trufflehog-results/trufflehog_report.json
-                sed '$!s/$/,/' trufflehog-results/raw_trufflehog_report.json >> trufflehog-results/trufflehog_report.json
-								                echo "]" >> trufflehog-results/trufflehog_report.json
+trufflehog git file://$PWD --branch main --json > trufflehog-results/raw_trufflehog_report.json
+
+ 
+if [ -s trufflehog-results/raw_trufflehog_report.json ]; then
+
+	  echo "[" > trufflehog-results/trufflehog_report.json
+		  sed '$!s/$/,/' trufflehog-results/raw_trufflehog_report.json >> trufflehog-results/trufflehog_report.json
+			  echo "]" >> trufflehog-results/trufflehog_report.json
+				else
+				  echo " Błąd: TruffleHog nie wygenerował raportu." >&2
+					  exit 1
+						fi
 '''
 }
 }
