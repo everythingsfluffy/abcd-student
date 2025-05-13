@@ -120,6 +120,9 @@ pipeline {
 mkdir -p trufflehog-results
  trufflehog git file:///var/jenkins_home/workspace/JuiceTest --branch main --json \
                      > trufflehog-results/trufflehog_report.json
+echo "[" > trufflehog-results/trufflehog_report.json
+                sed '$!s/$/,/' trufflehog-results/raw_trufflehog_report.json >> trufflehog-results/trufflehog_report.json
+								                echo "]" >> trufflehog-results/trufflehog_report.json
 '''
 }
 }
