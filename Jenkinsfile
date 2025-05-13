@@ -11,7 +11,7 @@ pipeline {
 	}
 
 	stages {
-	stage('Clean old artifacts') {
+	
 		stage('Install dependencies (only once)') {
 			when {
 				not {
@@ -150,4 +150,4 @@ archiveArtifacts artifacts: '*.xml', allowEmptyArchive: true
 
 }
 
-}
+
