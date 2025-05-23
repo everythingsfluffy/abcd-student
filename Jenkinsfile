@@ -11,7 +11,7 @@ pipeline {
 	}
 
 	stages {
-	
+
 		stage('Install dependencies (only once)') {
 			when {
 				not {
@@ -59,26 +59,26 @@ pipeline {
 
 
 		}
-/*		stage('Import OSV Report to DefectDojo') {
-			steps {
-				script {
+		/*		stage('Import OSV Report to DefectDojo') {
+					steps {
+					script {
 					def dojoUrl = 'http://192.168.40.18:9090/api/v2/'
-						def apiKey = '10e30cc2206235cf618e6ace3e6c9c9d2f9d6939'
-						def productId = '1'
+					def apiKey = '10e30cc2206235cf618e6ace3e6c9c9d2f9d6939'
+					def productId = '1'
 
-						sh """
-						curl -k -X POST "${dojoUrl}reimport-scan/" \
-						-H "Authorization: Token ${apiKey}" \
-						-F "scan_type=OSV Scan" \
-						-F "minimum_severity=Low" \
-						-F "file=@osv_report.json" \
-						-F "product_name=osv"\
-						-F engagement_name="Test"
-						"""
-				}
-			}
-		}
-*/
+					sh """
+					curl -k -X POST "${dojoUrl}reimport-scan/" \
+					-H "Authorization: Token ${apiKey}" \
+					-F "scan_type=OSV Scan" \
+					-F "minimum_severity=Low" \
+					-F "file=@osv_report.json" \
+					-F "product_name=osv"\
+					-F engagement_name="Test"
+					"""
+					}
+					}
+					}
+		 */
 		stage('[ZAP] Passive Scan using Docker Plugin') {
 			steps {
 				script {
@@ -112,25 +112,47 @@ pipeline {
 																	 }
 																	 }
 
-																	 
-				 stage('TruffleHog Scan') {
-					steps {
-						script {
-							sh '''
 
-mkdir -p trufflehog-results
-trufflehog git file://$PWD --branch main --json > trufflehog-results/raw_trufflehog_report.json
+																	 stage('TruffleHog Scan') {
+																	 steps {
+																	 script {
+																	 sh '''
 
- 
-if [ -s trufflehog-results/raw_trufflehog_report.json ]; then
+																	 mkdir -p trufflehog-results
+																	 trufflehog git file://$PWD --branch main --json > trufflehog-results/raw_trufflehog_report.json
 
-	  echo "[" > trufflehog-results/trufflehog_report.json
-		  sed '$!s/$/,/' trufflehog-results/raw_trufflehog_report.json >> trufflehog-results/trufflehog_report.json
-			  echo "]" >> trufflehog-results/trufflehog_report.json
-				else
-				  echo " Błąd: TruffleHog nie wygenerował raportu." >&2
-					  exit 1
-						fi
+
+																	 if [ -s trufflehog-results/raw_trufflehog_report.json ]; then
+
+																	 echo "[" > trufflehog-results/trufflehog_report.json
+																	 sed '$!s/$/,/' trufflehog-results/raw_trufflehog_report.json >> trufflehog-results/trufflehog_report.json
+																	 echo "]" >> trufflehog-results/trufflehog_report.json
+																	 else
+																	 echo " Błąd: TruffleHog nie wygenerował raportu." >&2
+																	 exit 1
+																	 fi
+																	 '''
+																	 }
+																	 }
+																	 }
+																	 stage('Semgrep Scan') {
+																	 steps {
+																	 script {
+																	 sh '''
+																	 mkdir -p semgrep-results
+
+semgrep scan \
+--config auto \
+--json \
+--output semgrep-results/semgrep_report.json \
+--exclude semgrep-results \
+.
+
+
+if [ ! -s semgrep-results/semgrep_report.json ]; then
+echo "No results"
+exit 1
+fi
 '''
 }
 }
