@@ -165,6 +165,7 @@ always {
 script {
 archiveArtifacts artifacts: 'trufflehog-results/*.json', allowEmptyArchive: true
 archiveArtifacts artifacts: '*.xml', allowEmptyArchive: true
+archiveArtifacts artifacts: 'semgrep-results/*.json', allowEmptyArchive: true
 
 }            
 }
